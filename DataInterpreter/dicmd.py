@@ -1,16 +1,17 @@
 # cmd view for the DataInterpreter
 import cmd
-import model.di
+import di
 import dicontroller
-
+import dipersistence
 
 class DataInterpreterCmd(cmd.Cmd):
     """Simple command processor example."""
 
     def __init(self):
         cmd.Cmd.__init__(self)
-        # self.prompt = "PhoneKeyPad: "
-        self.intro = "Enter a string to digitize: "
+        self.prompt = "DataInterpreter: "
+        # self.intro = "generate charts"
+        self.controller = None
 
     def register_controller(self, the_controller):
         self.controller = the_controller
@@ -28,12 +29,13 @@ class DataInterpreterCmd(cmd.Cmd):
               " as on a phone key pad")
     """
 
-    def do_load(self, file_name):
+    def do_loadcsv(self, file_path):
         """
          get file name and pass to controller
          on success, update prompt to selected file
          on failure, complain
         """
+        self.controller.load_csv(file_path)
 
     def do_display_pie(self, data_selection):
         """
@@ -56,15 +58,14 @@ class DataInterpreterCmd(cmd.Cmd):
         print()
 
     def do_quit(self, line):
-        """Quits you out of PhoneKeyPad."""
+        """Quits you out of data interpreter cmd."""
         print("Quitting...")
         return 1
 
 # app/ instantiate and go
-"""
+
 if __name__ == '__main__':
-    view = KeyPadCmd()
-    controller = kpcontroller.Controller(kpmodel.PhoneKeyPad(), view)
+    view = DataInterpreterCmd()
+    controller = dicontroller.Controller(di.DataInterpreter(), view, dipersistence.DiPersistence(r'H:\\'))
     view.register_controller(controller)
     view.cmdloop()
-"""
