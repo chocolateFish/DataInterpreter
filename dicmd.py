@@ -9,12 +9,17 @@ class DataInterpreterCmd(cmd.Cmd):
 
     def __init(self):
         cmd.Cmd.__init__(self)
-        self.prompt = "DataInterpreter: "
-        # self.intro = "generate charts"
         self.controller = None
+        self.prompt = '(Data Interpreter) '
+        # self.intro = "generate charts"
 
     def register_controller(self, the_controller):
         self.controller = the_controller
+
+    def error_message(self, msg):
+        """prints error message"""
+        print(msg)
+
     """
     def do_digitize(self, a_string):
         # error handling - invalid input
@@ -66,6 +71,6 @@ class DataInterpreterCmd(cmd.Cmd):
 
 if __name__ == '__main__':
     view = DataInterpreterCmd()
-    controller = dicontroller.Controller(di.DataInterpreter(), view, dipersistence.DiPersistence(r'H:\\'))
+    controller = dicontroller.Controller(di.DataInterpreter(), view, dipersistence.DiPersistence(''))
     view.register_controller(controller)
     view.cmdloop()

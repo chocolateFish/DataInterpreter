@@ -1,5 +1,6 @@
 #persistence layer for DataInterpreter CLI App
 import csv
+import sys
 
 
 class DiPersistence(object):
@@ -17,7 +18,6 @@ class DiPersistence(object):
                     all_data.append(row)
                 return all_data
             except csv.Error as e:
-                raise('file {}, line {}: {}'.format(filename, reader.line_num, e))
-        # except FileNotFoundError as no_file_e:
-        #   raise('file {}: {}'.format(filename, no_file_e))
-
+                raise Exception('file {}, line {}: {}'.format(filename, reader.line_num, e))from e
+            except FileNotFoundError:
+                raise

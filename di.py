@@ -2,6 +2,7 @@
 import re
 
 
+
 class DataInterpreter():
     id_pattern = re.compile('[A-Z][0-9]{3}')
     gender_pattern = re.compile('(M|F)')
@@ -20,12 +21,12 @@ class DataInterpreter():
         :return: None
         """
         for data_list in all_data_list:
-            if self.__validate(data.upper() for data in data_list):
+            if self.__validate(data_list):
                 self.__all_valid_data.append(data_list)
             else:
                 self.__all_invalid_data.append(data_list)
 
-    def __validate_data(self, data_list ):
+    def __validate(self, data_list ):
         """
         validate data using re patterns
         :return: True or False
