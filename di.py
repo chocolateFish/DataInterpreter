@@ -38,8 +38,27 @@ class DataInterpreter():
                self.bmi_pattern.match(data_list[4])and \
                self.income_pattern.match(data_list[5])
 
-    def find_data_by_selection(self, selections):
+    def get_valid_incomes(self):
         """
-        :param selections:
-        :return: ?collection - what does the printing module need?
+        return a list of ids
+        :return: [str] of data (eg. id)
         """
+        income_array = []
+        for data in self.__all_valid_data:
+            income_array.append(float(data[5]))
+        income_array.sort()
+        return income_array
+
+    def get_valid_ages(self):
+        """
+        return a list of ages
+        :return: [str] of age data
+        """
+        age_array = []
+        for data in self.__all_valid_data:
+            age_array.append(float(data[2]))
+        age_array.sort()
+        return age_array
+
+
+

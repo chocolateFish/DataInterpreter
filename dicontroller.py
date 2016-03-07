@@ -2,10 +2,11 @@
 
 
 class Controller:
-    def __init__(self, di_model, di_view, di_persistence):
+    def __init__(self, di_model, di_view, di_persistence, chart_view):
         self.model = di_model
         self.view = di_view
         self.persistence = di_persistence
+        self.chart = chart_view
 
     def load_csv(self, file_path):
         try:
@@ -16,13 +17,11 @@ class Controller:
             self.view.error_message("No such file. please enter a valid file path")
 
     #move to ChartController
-    def chart(self, x_data, y_data, title):
-        """
-        :param x_data:
-        :param y_data:
-        :param title:
-        :return:
-        get x_data array from model (eg. age or income)
-        get y_data array from model
-        pass to view.
-        """
+    def draw_chart(self, x_data, y_data, title, save_a):
+        # broken
+        # write model.get_data(label) function
+        # 
+        self.model.get_data(x_data)
+        ages = self.model.get_valid_ages()
+        incomes = self.model.get_valid_incomes()
+        self.chart.draw_plot('age-gender relationship', 'ages', 'Genders', ages, incomes)

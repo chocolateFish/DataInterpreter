@@ -3,6 +3,7 @@ import cmd
 import di
 import dicontroller
 import dipersistence
+import chart
 
 
 class DataInterpreterCmd(cmd.Cmd):
@@ -42,30 +43,26 @@ class DataInterpreterCmd(cmd.Cmd):
                           '     bmi: (Normal|Overweight|Obesity|Underweight) example Normal',
                           '     income: [0-9]{2,3} example 239']))
 
+    def do_makechart(self, x_data, y_data, title, save_as):
+        self.controller.draw_chart(x_data, y_data, title, save_as)
 
-    def do_chart(self, x_data, y_data, title):
-        """
-        pass selected item onto controller
-        on success, the pretty print will be stored as a ?format
-        on failure, break
-        only take in a fixed  set of values
-        """
-        self.controller.chart(self, x_data, y_data, title)
+    def help_makechart(self):
+        # destination directory
+        print( '\n'.join(['Generates a chart by plotting [y_data] against [x_data]',
+                          '     Accepted inputs for x_data and y_data: age | income | sales',
+                          '     Values are taken from file + only valid values are plotted',
+                          'titled [title]',
+                          'saved as [save_as]',
+                          '     Image generated is stored as a .png file ',
+                          '*If there is no data this command will not work']))
 
-    def help_chart(self):
-        """
-        fixed set of values
-        :return:
-        """
-
-    #
     def do_EOF(self, line):
         return True
 
     def postloop(self):
         print()
 
-    def do_quit(self):
+    def do_quit(self, i_break_without_this):
         """Quits you out of data interpreter cmd."""
         print("Quitting...")
         return 1
@@ -77,6 +74,6 @@ class DataInterpreterCmd(cmd.Cmd):
 # app/ instantiate and go
 if __name__ == '__main__':
     view = DataInterpreterCmd()
-    controller = dicontroller.Controller(di.DataInterpreter(), view, dipersistence.DiPersistence(''))
+    controller = dicontroller.Controller(di.DataInterpreter(), view, dipersistence.DiPersistence(''),chart.ChartView())
     view.register_controller(controller)
     view.cmdloop()
