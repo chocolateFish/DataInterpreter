@@ -1,7 +1,6 @@
 # DataInterpreter - facade for the Model
 import re
 
-
 class DataInterpreter():
     id_pattern = re.compile('[A-Z][0-9]{3}')
     gender_pattern = re.compile('(M|F)')
