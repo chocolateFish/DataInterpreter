@@ -5,8 +5,10 @@ import dicontroller
 import dipersistence
 import chart
 
+
 class DataInterpreterCmd(cmd.Cmd):
     """Simple command processor example."""
+    CHART_OPTIONS = ['age income', 'income age', 'age sales', 'sales age', 'income sales', 'sales income']
 
     def __init__(self):
         cmd.Cmd.__init__(self)
@@ -19,18 +21,18 @@ class DataInterpreterCmd(cmd.Cmd):
 
     @staticmethod
     def error_message(msg):
-        """prints error message
-        @:param: msg - string to print
+        """
+        prints error message
+        :param msg: str to print
         """
         print(msg)
 
-    def do_loadcsv(self, args):
+    def do_loadcsv(self, file_path):
         """
-         get file name and pass to controller
-         on success, update prompt to selected file
-         on failure, complain
+         get file_path and pass to controller
+         :param file_path: file path as a str
         """
-        self.controller.load_csv(args)
+        self.controller.load_csv(file_path)
 
     def help_loadcsv(self):
         # Add what happens to invalid data - printed?how?
@@ -45,23 +47,42 @@ class DataInterpreterCmd(cmd.Cmd):
                           '     bmi: (Normal|Overweight|Obesity|Underweight) example Normal',
                           '     income: [0-9]{2,3} example 239']))
 
-    def do_chart(self, args):
-        result = args.split()
-        x_data = result[0]
-        y_data = result[1]
-        title = result[2]
+    def do_chart(self, options):
+        """
+        if options are valid input, otherwise do error
+        :param options: string, one of CHART_OPTIONS
+        """
+        if options and options in self.CHART_OPTIONS:
+            result = options.split()
+            x_data = result[0]
+            y_data = result[1]
+            self.controller.draw_chart(x_data, y_data)
+        else:
+            print("invalid option selected")
 
-        self.controller.draw_chart(x_data, y_data, title)
+    def complete_chart(self, text, line, begidx, endidx):
+        if not text:
+            completions = self.CHART_OPTIONS[:]
+        else:
+            completions = [o
+                           for o in self.CHART_OPTIONS
+                           if o.startswith(text)]
+        return completions
 
     def help_chart(self):
         # destination directory
-        print( '\n'.join(['Generates a chart by plotting [y_data] against [x_data]',
-                          '     Accepted inputs for x_data and y_data: age | income | sales',
-                          '     Values are taken from file + only valid values are plotted',
-                          'titled [title]',
-                          'saved as [save_as]',
+        #break if there is no data
+        print( '\n'.join(['Generates a chart using plotting options',
+                          'Accepted inputs are:',
+                          '     age income',
+                          '     income age',
+                          '     age sales',
+                          '     sales age',
+                          '     income sales',
+                          '     sales income'
+                          '     data values are taken from file and only valid values are plotted',
                           '     Image generated is stored as a .png file ',
-                          '*If there is no data this command will not work']))
+                          '!!!If there is no data this command will not work!!!']))
 
     def do_EOF(self, args):
         return True

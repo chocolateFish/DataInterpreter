@@ -2,7 +2,6 @@
 import re
 
 
-
 class DataInterpreter():
     id_pattern = re.compile('[A-Z][0-9]{3}')
     gender_pattern = re.compile('(M|F)')
@@ -10,7 +9,7 @@ class DataInterpreter():
     sales_pattern = re.compile('[0-9]{3}')
     bmi_pattern = re.compile('(Normal|Overweight|Obesity|Underweight)')
     income_pattern = re.compile('[0-9]{2,3}')
-    data_columns = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
+    DATA_COLUMNS = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
 
     def __init__(self):
         self.__all_valid_data = []
@@ -40,11 +39,16 @@ class DataInterpreter():
                self.income_pattern.match(data_list[5])
 
     def get_valid_data(self, data_name):
+        assert data_name in self.DATA_COLUMNS
         data_array = []
         for data in self.__all_valid_data:
-            item = data[self.data_columns.index(data_name)]
+            item = data[self.DATA_COLUMNS.index(data_name)]
             data_array.append(item)
         data_array.sort()
         return data_array
 
-
+    def contains_valid_data(self):
+        if self.__all_valid_data:
+            return True
+        else:
+            return False
