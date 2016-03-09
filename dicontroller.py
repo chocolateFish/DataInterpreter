@@ -18,6 +18,13 @@ class Controller:
 
     #move to ChartController
     def draw_chart(self, x_data, y_data, title):
-        x = self.model.get_valid_data(x_data)
-        y = self.model.get_valid_data(y_data)
-        self.chart.draw_plot(title, x_data, y_data, x, y)
+        try:
+            x = [float(item)for item in self.model.get_valid_data(x_data)]
+            y = [float(item)for item in self.model.get_valid_data(y_data)]
+            self.chart.draw_plot(title, x_data, y_data, x, y)
+        except ValueError as e:
+            self.view.error_message(e.args[0])
+        except Exception:
+            self.view.error_message("Something went wrong with the charting")
+
+

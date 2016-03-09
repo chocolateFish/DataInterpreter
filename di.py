@@ -1,6 +1,8 @@
 # DataInterpreter - facade for the Model
 import re
 
+
+
 class DataInterpreter():
     id_pattern = re.compile('[A-Z][0-9]{3}')
     gender_pattern = re.compile('(M|F)')
@@ -8,6 +10,7 @@ class DataInterpreter():
     sales_pattern = re.compile('[0-9]{3}')
     bmi_pattern = re.compile('(Normal|Overweight|Obesity|Underweight)')
     income_pattern = re.compile('[0-9]{2,3}')
+    data_columns = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
 
     def __init__(self):
         self.__all_valid_data = []
@@ -37,33 +40,11 @@ class DataInterpreter():
                self.income_pattern.match(data_list[5])
 
     def get_valid_data(self, data_name):
-        try:
-            data_array = []
-            for data in self.__all_valid_data:
-                item_str = data[self.__data_pos(data_name)]
-                data_array.append(float(item_str))
-            data_array.sort()
-            return data_array
-        except Exception:
-            raise
-
-    def __data_pos(self, data_name):
-        """
-        return a list of ids
-        :param:[data_name] string-type of data - accepted 'age', 'sales', 'income'
-        :return: [str] of id data
-        """
-        data_pos = None
-        if data_name == 'age':
-            data_pos = 2
-        elif data_name == 'income':
-            data_pos = 5
-        elif data_name == 'sales':
-            data_pos = 3
-        else:
-            data_pos = None
-        return data_pos
-
-
+        data_array = []
+        for data in self.__all_valid_data:
+            item = data[self.data_columns.index(data_name)]
+            data_array.append(item)
+        data_array.sort()
+        return data_array
 
 

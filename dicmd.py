@@ -5,7 +5,6 @@ import dicontroller
 import dipersistence
 import chart
 
-
 class DataInterpreterCmd(cmd.Cmd):
     """Simple command processor example."""
 
@@ -18,8 +17,11 @@ class DataInterpreterCmd(cmd.Cmd):
     def register_controller(self, the_controller):
         self.controller = the_controller
 
-    def error_message(self, msg):
-        """prints error message"""
+    @staticmethod
+    def error_message(msg):
+        """prints error message
+        @:param: msg - string to print
+        """
         print(msg)
 
     def do_loadcsv(self, args):
@@ -43,14 +45,15 @@ class DataInterpreterCmd(cmd.Cmd):
                           '     bmi: (Normal|Overweight|Obesity|Underweight) example Normal',
                           '     income: [0-9]{2,3} example 239']))
 
-    def do_makechart(self, args):
+    def do_chart(self, args):
         result = args.split()
         x_data = result[0]
         y_data = result[1]
         title = result[2]
+
         self.controller.draw_chart(x_data, y_data, title)
 
-    def help_makechart(self):
+    def help_chart(self):
         # destination directory
         print( '\n'.join(['Generates a chart by plotting [y_data] against [x_data]',
                           '     Accepted inputs for x_data and y_data: age | income | sales',
