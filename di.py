@@ -21,7 +21,7 @@ class DataInterpreter:
 
     def __add_data(self, all_data):
         """
-        validate data and add valid data
+        add valid data
         :param all_data: list containing data for multiple records
         """
         for data_list in all_data:
@@ -33,7 +33,21 @@ class DataInterpreter:
     def __validate(self, input_list):
         """
         validate data using re patterns
+        if The data is valid return True else return False
         :return: True or False
+
+        >>>__validate("W605","M","05","636","Obesity","313")
+        True
+        >>>__validate("T604","F","32","636","Normal","31")
+        True
+        >>>__validate("F","32","636","Normal","31")
+        True
+        >>>__validate("582","M","52","21","Obesity","36")
+        False
+        >>>__validate("","M","42","617","Normal","82")
+        False
+        >>>__validate("B*&@", "F","6","511","Normal","25")
+        False
         """
         return len(input_list) == 6 and \
             re.compile(self.RULES.get('id')).match(input_list[0]) and \
@@ -52,10 +66,17 @@ class DataInterpreter:
         return data_array
 
     def get_all_invalid_records(self):
-        return self.__invalid_records
+        invalid_msg = [str(len(self.__invalid_records)) + ' invalid records skipped:']
+        for r in self.__invalid_records:
+            invalid_msg.append(", ".join(r))
+        return '\n'.join(invalid_msg)
 
     def contains_valid_records(self):
         if self.__valid_records:
             return True
-        else:
-            return False
+        return False
+
+    def contains_invalid_records(self):
+        if self.__invalid_records:
+            return True
+        return False

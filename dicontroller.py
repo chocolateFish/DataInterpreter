@@ -1,4 +1,5 @@
 # controller for the DataInterpreter
+from csv import Error as csv_err
 
 
 class Controller:
@@ -10,13 +11,10 @@ class Controller:
     def load_csv(self, file_path):
         try:
             self.model.load_csv(file_path)
-            if self.model.get_all_invalid_records():
-                invalid_msg = [str(len(self.model.get_all_invalid_records())) + ' invalid records skipped:']
-                for r in self.model.get_all_invalid_records():
-                    invalid_msg.append(", ".join(r))
-                self.view.error_message('\n'.join(invalid_msg))
-        except Exception as e: # not sure this is the best way to pick up the csv Error?
-            self.view.error_message(e)
+            if self.model.contains_invalid_records():
+                self.view.error_message(self.model.get_all_invalid_records())
+        except csv_err: # not sure this is the best way to catch the csv Error?
+            self.view.error_message(csv_err)
         except FileNotFoundError:
             self.view.error_message("No such file. please enter a valid file path")
 

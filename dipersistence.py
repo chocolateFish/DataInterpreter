@@ -11,8 +11,8 @@ class DiPersistence(object):
         with open(filename, newline='') as f:
             reader = csv.reader(f)
             try:
-                return [row for row in reader if row]
+                return [row for row in reader]
             except csv.Error as e:
-                raise Exception('file {}, line {}: {}'.format(filename, reader.line_num, e))from e
+                raise csv.Error('file {}, line {}: {}'.format(filename, reader.line_num, e))from e
             except FileNotFoundError:
                 raise

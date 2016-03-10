@@ -7,9 +7,11 @@ class LoadTestCase(unittest.TestCase):
 
     def setUp(self):
         self.di = di.DataInterpreter()
-        self.persist = dipersistence.DiPersistence('')
+        from unittest.mock import MagicMock
+        persistence = dipersistence.DiPersistence('')
+        persistence.load_csv = MagicMock(return_value=3)
 
-    def test_load_csv(self):
+    def test_load_csv(self): # use Mocks to stand in for csv loader
         file_path = r'C:\test_validdata.csv'
         expected_data_length = 1000
         expected_row_length = 6
