@@ -2,22 +2,21 @@
 
 
 class Controller:
-    def __init__(self, di_model, di_view, di_persistence, chart_view):
+    def __init__(self, di_model, di_view, chart_view):
         self.model = di_model
         self.view = di_view
-        self.persistence = di_persistence
         self.chart = chart_view
 
     def load_csv(self, file_path):
         try:
-            self.model.add_data(self.persistence.load_csv(file_path))
+            self.model.load_csv(file_path)
             if self.model.get_all_invalid_records():
                 invalid_msg = [str(len(self.model.get_all_invalid_records())) + ' invalid records skipped:']
                 for r in self.model.get_all_invalid_records():
                     invalid_msg.append(", ".join(r))
                 self.view.error_message('\n'.join(invalid_msg))
-        except Exception as e:
-            self.view.error_mesage(e)
+        except Exception as e: # not sure this is the best way to pick up the csv Error?
+            self.view.error_message(e)
         except FileNotFoundError:
             self.view.error_message("No such file. please enter a valid file path")
 

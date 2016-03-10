@@ -25,7 +25,7 @@ class DataInterpreterCmd(cmd.Cmd):
         prints error message
         :param msg: str to print
         """
-        print("Whoops! ",msg)
+        print("Whoops! ", msg)
 
     def do_loadcsv(self, file_path):
         """
@@ -37,15 +37,15 @@ class DataInterpreterCmd(cmd.Cmd):
     def help_loadcsv(self):
         # Add what happens to invalid data - printed?how?
         # Add data that is accepted (eg> ID accepts x345 or X345
-        print( '\n'.join(['loads data from a valid csv file at [file_path]',
-                          'Each data entry must be in following order: id, gender, age, sales, bmi, income',
-                          'Rules for Data as follows',
-                          '     id :[A-Z][0-9]{3} example S234',
-                          '     gender: (M|F) example M ',
-                          '     age: [0-9]{2} example 23',
-                          '     sales: [0-9]{3} example 034',
-                          '     bmi: (Normal|Overweight|Obesity|Underweight) example Normal',
-                          '     income: [0-9]{2,3} example 239']))
+        print('\n'.join(['loads data from a valid csv file at [file_path]',
+                         'Each data entry must be in following order: id, gender, age, sales, bmi, income',
+                         'Rules for Data as follows',
+                         '     id :[A-Z][0-9]{3} example S234',
+                         '     gender: (M|F) example M ',
+                         '     age: [0-9]{2} example 23',
+                         '     sales: [0-9]{3} example 034',
+                         '     bmi: (Normal|Overweight|Obesity|Underweight) example Normal',
+                         '     income: [0-9]{2,3} example 239']))
 
     def do_chart(self, options):
         """
@@ -71,18 +71,17 @@ class DataInterpreterCmd(cmd.Cmd):
 
     def help_chart(self):
         # destination directory
-        #break if there is no data
         print('\n'.join(['Generates a chart using plotting options',
-                          'Accepted inputs are:',
-                          '     age income',
-                          '     income age',
-                          '     age sales',
-                          '     sales age',
-                          '     income sales',
-                          '     sales income'
-                          '     data values are taken from file and only valid values are plotted',
-                          '     Image generated is stored as a .png file ',
-                          '!If there is no data this command will not work!']))
+                         'Accepted inputs are:',
+                         '     age income',
+                         '     income age',
+                         '     age sales',
+                         '     sales age',
+                         '     income sales',
+                         '     sales income'
+                         '     data values are taken from file and only valid values are plotted',
+                         '     Image generated is stored as a .png file ',
+                         '!If there is no data this command will not work!']))
 
     def do_EOF(self, args):
         return True
@@ -91,7 +90,7 @@ class DataInterpreterCmd(cmd.Cmd):
         print()
 
     def do_quit(self, args):
-        """Quits you out of data interpreter cmd."""
+        """Quits you out of the Data Interpreter"""
         print("Quitting...")
         return 1
 
@@ -102,6 +101,6 @@ class DataInterpreterCmd(cmd.Cmd):
 # app/ instantiate and go
 if __name__ == '__main__':
     view = DataInterpreterCmd()
-    controller = dicontroller.Controller(di.DataInterpreter(), view, dipersistence.DiPersistence(''),chart.ChartView())
+    controller = dicontroller.Controller(di.DataInterpreter(dipersistence.DiPersistence('')), view, chart.ChartView())
     view.register_controller(controller)
     view.cmdloop()
