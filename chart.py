@@ -29,8 +29,3 @@ class ChartView:
         else:
              # actually - pass to the controller to save
              plt.savefig('myfig')
-
-
-
-
-

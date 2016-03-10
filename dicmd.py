@@ -25,7 +25,7 @@ class DataInterpreterCmd(cmd.Cmd):
         prints error message
         :param msg: str to print
         """
-        print(msg)
+        print("Whoops! ",msg)
 
     def do_loadcsv(self, file_path):
         """
@@ -72,7 +72,7 @@ class DataInterpreterCmd(cmd.Cmd):
     def help_chart(self):
         # destination directory
         #break if there is no data
-        print( '\n'.join(['Generates a chart using plotting options',
+        print('\n'.join(['Generates a chart using plotting options',
                           'Accepted inputs are:',
                           '     age income',
                           '     income age',
@@ -82,7 +82,7 @@ class DataInterpreterCmd(cmd.Cmd):
                           '     sales income'
                           '     data values are taken from file and only valid values are plotted',
                           '     Image generated is stored as a .png file ',
-                          '!!!If there is no data this command will not work!!!']))
+                          '!If there is no data this command will not work!']))
 
     def do_EOF(self, args):
         return True
