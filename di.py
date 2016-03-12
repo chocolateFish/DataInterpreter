@@ -1,5 +1,6 @@
 # DataInterpreter - facade for the Model
 import re
+from csv import Error as csv_err
 
 
 class DataInterpreter:
@@ -13,49 +14,76 @@ class DataInterpreter:
 
     def __init__(self, persistence):
         self.__valid_records = []
-        self.__invalid_records = []
         self.persistence = persistence
 
     def load_csv(self, file_path):
-        self.__add_data(self.persistence.load_csv(file_path))
+        status = ""
+        try:
+            status = self.__add_data(self.persistence.load_csv(file_path))
+        except FileNotFoundError:
+            status = "No file found at " + file_path + ". Please enter a valid file path."
+        except csv_err:  # not sure this is the best way to catch the csv Error?
+            status = "csv_err"
+        except Exception as e:
+            status = e
+        finally:
+            return status
 
     def __add_data(self, all_data):
         """
         add valid data
         :param all_data: list containing data for multiple records
         """
+        count_invalid = 0
+        count_valid = 0
+        invalid_data = 'Invalid data at id ='
         for data_list in all_data:
-            if self.__validate(data_list):
-                self.__valid_records.append(data_list)
+            if self.__validated(data_list):
+                self.__valid_records.append(self.__validated(data_list))
+                count_valid += 1
             else:
-                self.__invalid_records.append(data_list)
+                # self.__invalid_records.append(data_list)
+                invalid_data += " " + data_list[0]
+                count_invalid += 1
+        status = str(count_valid) + ' records added'
+        if count_invalid:
+            status += '\n' + str(count_invalid) + ' invalid records skipped:\n' + invalid_data
+        return status
 
-    def __validate(self, input_list):
+    def __validated(self, input_list):
         """
         validate data using re patterns
-        if The data is valid return True else return False
-        :return: True or False
-
-        >>>__validate("W605","M","05","636","Obesity","313")
-        True
-        >>>__validate("T604","F","32","636","Normal","31")
-        True
-        >>>__validate("F","32","636","Normal","31")
-        True
-        >>>__validate("582","M","52","21","Obesity","36")
-        False
-        >>>__validate("","M","42","617","Normal","82")
-        False
-        >>>__validate("B*&@", "F","6","511","Normal","25")
-        False
+        if The input_list is valid return input_list else return None
+        :return: Validated input_list or None
+        >>>__validated("W605","M","05","636","Obesity","313")
+        ["W605","M","05","636","Obesity","313"]
+        >>>__validated("T604","f","32","636","Normal","31")
+        ["T604","F","32","636","Normal","31"]
+        >>>__validated("F","32","636","Normal","31")
+        None
+        >>>__validated("582","M","52","210","OBESITY","36")
+        None
+        >>>__validated("","M","42","617","Normal","82")
+        None
+        >>>__validated("B*&@", "F","6","511","Normal","25")
+        None
         """
-        return len(input_list) == 6 and \
-            re.compile(self.RULES.get('id')).match(input_list[0]) and \
-            re.compile(self.RULES.get('gender')).match(input_list[1]) and \
-            re.compile(self.RULES.get('age')).match(input_list[2]) and \
-            re.compile(self.RULES.get('sales')).match(input_list[3]) and \
-            re.compile(self.RULES.get('bmi')).match(input_list[4])and \
-            re.compile(self.RULES.get('income')).match(input_list[5])
+        validated = None
+        try:
+            is_valid = re.fullmatch(self.RULES.get('id'), input_list[0].upper()) and \
+                       re.fullmatch(self.RULES.get('gender'), input_list[1].upper()) and \
+                       re.fullmatch(self.RULES.get('age'), input_list[2]) and \
+                       re.fullmatch(self.RULES.get('sales'), input_list[3]) and \
+                       re.fullmatch(self.RULES.get('bmi'), input_list[4].capitalize())and \
+                       re.fullmatch(self.RULES.get('income'), input_list[5])
+            if is_valid:
+                validated = input_list
+        except TypeError:
+            pass
+        except IndexError:
+            pass
+        finally:
+            return validated
 
     def get_valid_data(self, data_name):
         assert data_name in self.RECORD_COLUMNS
@@ -65,18 +93,7 @@ class DataInterpreter:
             data_array.append(item)
         return data_array
 
-    def get_all_invalid_records(self):
-        invalid_msg = [str(len(self.__invalid_records)) + ' invalid records skipped:']
-        for r in self.__invalid_records:
-            invalid_msg.append(", ".join(r))
-        return '\n'.join(invalid_msg)
-
     def contains_valid_records(self):
         if self.__valid_records:
-            return True
-        return False
-
-    def contains_invalid_records(self):
-        if self.__invalid_records:
             return True
         return False

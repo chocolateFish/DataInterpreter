@@ -20,12 +20,12 @@ class DataInterpreterCmd(cmd.Cmd):
         self.controller = the_controller
 
     @staticmethod
-    def error_message(msg):
+    def show(msg):
         """
         prints error message
         :param msg: str to print
         """
-        print("Whoops! ", msg)
+        print(msg)
 
     def do_loadcsv(self, file_path):
         """
@@ -40,12 +40,13 @@ class DataInterpreterCmd(cmd.Cmd):
         print('\n'.join(['loads data from a valid csv file at [file_path]',
                          'Each data entry must be in following order: id, gender, age, sales, bmi, income',
                          'Rules for Data as follows',
-                         '     id :[A-Z][0-9]{3} example S234',
-                         '     gender: (M|F) example M ',
+                         '     id :[A-Z][0-9]{3} example S234)',
+                         '     gender: (M|F) example M',
                          '     age: [0-9]{2} example 23',
                          '     sales: [0-9]{3} example 034',
-                         '     bmi: (Normal|Overweight|Obesity|Underweight) example Normal',
-                         '     income: [0-9]{2,3} example 239']))
+                         '     bmi: (Normal|Overweight|Obesity|Underweight)',
+                         '     income: [0-9]{2,3} example 239',
+                         'Will validate incorrect case for alphabetic values']))
 
     def do_chart(self, options):
         """
