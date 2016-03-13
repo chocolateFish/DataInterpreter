@@ -13,8 +13,9 @@ class DataInterpreterCmd(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.controller = None
-        self.intro = "Interpret data from a csv file and generate charts "
-        self.prompt = '(Data Interpreter) '
+        self.intro = 'Interpret data from a csv file and generate charts.    Type help or ? to list commands.\n'
+        self.prompt = 'Data Interpreter: '
+        self.undoc_header = None  # no header for undoccumented commands
 
     def register_controller(self, the_controller):
         self.controller = the_controller
@@ -29,14 +30,13 @@ class DataInterpreterCmd(cmd.Cmd):
 
     def do_loadcsv(self, file_path):
         """
-         get file_path and pass to controller
+         get file_path
          :param file_path: file path as a str
         """
         self.controller.load_csv(file_path)
 
-    def help_loadcsv(self):
-        # Add what happens to invalid data - printed?how?
-        # Add data that is accepted (eg> ID accepts x345 or X345
+    @staticmethod
+    def help_loadcsv():
         print('\n'.join(['loads data from a valid csv file at [file_path]',
                          'Each data entry must be in following order: id, gender, age, sales, bmi, income',
                          'Rules for Data as follows',
@@ -70,8 +70,8 @@ class DataInterpreterCmd(cmd.Cmd):
                            if o.startswith(text)]
         return completions
 
-    def help_chart(self):
-        # destination directory
+    @staticmethod
+    def help_chart():
         print('\n'.join(['Generates a chart using plotting options',
                          'Accepted inputs are:',
                          '     age income',
@@ -84,20 +84,22 @@ class DataInterpreterCmd(cmd.Cmd):
                          '     Image generated is stored as a .png file ',
                          '!If there is no data this command will not work!']))
 
-    def do_EOF(self, args):
-        return True
-
-    def postloop(self):
-        print()
-
     def do_quit(self, args):
-        """Quits you out of the Data Interpreter"""
+        """Quits you out of the Data Interpreter
+        Data is not saved"""
         print("Quitting...")
         return 1
 
-    def emptyline(self):
-        """Do nothing on empty input line"""
-        pass
+    def do_EOF(self, args):
+        return True
+
+    def print_topics(self, header, cmds, cmdlen, maxcol):
+        # only print help for doccumented commands
+        if header is not None:
+            cmd.Cmd.print_topics(self, header, cmds, cmdlen, maxcol)
+
+    def postloop(self):
+        print()
 
 # app/ instantiate and go
 if __name__ == '__main__':

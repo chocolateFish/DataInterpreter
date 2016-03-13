@@ -8,7 +8,8 @@ class Controller:
         self.chart = chart_view
 
     def load_csv(self, file_path):
-        self.view.show(self.model.load_csv(file_path))
+        self.model.load_csv(file_path)
+        self.view.show(self.model.get_load_status())
 
     def draw_chart(self, x_data_name, y_data_name):
         if self.model.contains_valid_records():

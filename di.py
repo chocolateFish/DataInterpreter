@@ -14,20 +14,16 @@ class DataInterpreter:
 
     def __init__(self, persistence):
         self.__valid_records = []
-        self.persistence = persistence
+        self.__persistence = persistence
+        self.__load_status = ""
 
     def load_csv(self, file_path):
-        status = ""
         try:
-            status = self.__add_data(self.persistence.load_csv(file_path))
+            self.__add_data(self.__persistence.load_csv(file_path))
         except FileNotFoundError:
-            status = "No file found at " + file_path + ". Please enter a valid file path."
+            self.__load_status = "No file found at " + file_path + ". Please enter a valid file path."
         except csv_err:  # not sure this is the best way to catch the csv Error?
-            status = "csv_err"
-        except Exception as e:
-            status = e
-        finally:
-            return status
+            self.__load_status = "csv_err"
 
     def __add_data(self, all_data):
         """
@@ -36,24 +32,26 @@ class DataInterpreter:
         """
         count_invalid = 0
         count_valid = 0
-        invalid_data = 'Invalid data at id ='
+        invalid_data_ids = []
+        status = []
         for data_list in all_data:
             if self.__validated(data_list):
                 self.__valid_records.append(self.__validated(data_list))
                 count_valid += 1
             else:
-                # self.__invalid_records.append(data_list)
-                invalid_data += " " + data_list[0]
+                invalid_data_ids.append(data_list[0])
                 count_invalid += 1
-        status = str(count_valid) + ' records added'
+        status.append(str(count_valid) + ' records added')
         if count_invalid:
-            status += '\n' + str(count_invalid) + ' invalid records skipped:\n' + invalid_data
-        return status
+            status.append(str(count_invalid) + ' invalid records skipped:')
+            status.append('Invalid data at id = ' + ' '.join(invalid_data_ids))
+        self.__load_status = '\n'.join(status)
 
     def __validated(self, input_list):
         """
         validate data using re patterns
         if The input_list is valid return input_list else return None
+        data that raises an exception returns None
         :return: Validated input_list or None
         >>>__validated("W605","M","05","636","Obesity","313")
         ["W605","M","05","636","Obesity","313"]
@@ -84,6 +82,9 @@ class DataInterpreter:
             pass
         finally:
             return validated
+
+    def get_load_status(self):
+        return self.__load_status
 
     def get_valid_data(self, data_name):
         assert data_name in self.RECORD_COLUMNS
