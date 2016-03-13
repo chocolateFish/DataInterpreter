@@ -43,7 +43,7 @@ class DataInterpreter:
                 count_invalid += 1
         status.append(str(count_valid) + ' records added')
         if count_invalid:
-            status.append(str(count_invalid) + ' invalid records skipped:')
+            status.append(str(count_invalid) + ' invalid records skipped')
             status.append('Invalid data at id = ' + ' '.join(invalid_data_ids))
         self.__load_status = '\n'.join(status)
 
@@ -68,11 +68,14 @@ class DataInterpreter:
         """
         validated = None
         try:
-            is_valid = re.fullmatch(self.RULES.get('id'), input_list[0].upper()) and \
-                       re.fullmatch(self.RULES.get('gender'), input_list[1].upper()) and \
+            # fix case on alphabetic characters
+            input_list[0], input_list[1], input_list[4] = \
+                input_list[0].upper(), input_list[1].upper(), input_list[4].capitalize()
+            is_valid = re.fullmatch(self.RULES.get('id'), input_list[0]) and \
+                       re.fullmatch(self.RULES.get('gender'), input_list[1]) and \
                        re.fullmatch(self.RULES.get('age'), input_list[2]) and \
                        re.fullmatch(self.RULES.get('sales'), input_list[3]) and \
-                       re.fullmatch(self.RULES.get('bmi'), input_list[4].capitalize())and \
+                       re.fullmatch(self.RULES.get('bmi'), input_list[4])and \
                        re.fullmatch(self.RULES.get('income'), input_list[5])
             if is_valid:
                 validated = input_list
@@ -98,3 +101,7 @@ class DataInterpreter:
         if self.__valid_records:
             return True
         return False
+
+    # for testing purposes
+    def get_all_valid_records(self):
+        return self.__valid_records
