@@ -12,10 +12,11 @@ class DataInterpreter:
              'income': '[0-9]{2,3}'}
     RECORD_COLUMNS = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
 
-    def __init__(self, persistence):
+    def __init__(self, persistence, validator):
         self.__valid_records = []
         self.__persistence = persistence
         self.__load_status = ""
+        self.validator = validator
 
     def load_csv(self, file_path):
         try:
@@ -53,38 +54,40 @@ class DataInterpreter:
         if The input_list is valid return input_list else return None
         data that raises an exception returns None
         :return: Validated input_list or None
-        >>>__validated("W605","M","05","636","Obesity","313")
-        ["W605","M","05","636","Obesity","313"]
-        >>>__validated("T604","f","32","636","Normal","31")
-        ["T604","F","32","636","Normal","31"]
-        >>>__validated("F","32","636","Normal","31")
-        None
-        >>>__validated("582","M","52","210","OBESITY","36")
-        None
-        >>>__validated("","M","42","617","Normal","82")
-        None
-        >>>__validated("B*&@", "F","6","511","Normal","25")
-        None
         """
         validated = None
+        washed = []
         try:
             # fix case on alphabetic characters
             input_list[0], input_list[1], input_list[4] = \
                 input_list[0].upper(), input_list[1].upper(), input_list[4].capitalize()
-            is_valid = re.fullmatch(self.RULES.get('id'), input_list[0]) and \
-                       re.fullmatch(self.RULES.get('gender'), input_list[1]) and \
-                       re.fullmatch(self.RULES.get('age'), input_list[2]) and \
-                       re.fullmatch(self.RULES.get('sales'), input_list[3]) and \
-                       re.fullmatch(self.RULES.get('bmi'), input_list[4])and \
-                       re.fullmatch(self.RULES.get('income'), input_list[5])
+            for in_str in input_list:
+                washed.append(str(in_str.strip()))
+            is_valid = re.fullmatch(self.RULES.get('id'), washed[0]) and \
+                       re.fullmatch(self.RULES.get('gender'), washed[1]) and \
+                       re.fullmatch(self.RULES.get('age'), washed[2]) and \
+                       re.fullmatch(self.RULES.get('sales'), washed[3]) and \
+                       re.fullmatch(self.RULES.get('bmi'), washed[4])and \
+                       re.fullmatch(self.RULES.get('income'), washed[5])
             if is_valid:
-                validated = input_list
+                validated = washed
         except TypeError:
             pass
         except IndexError:
             pass
         finally:
             return validated
+
+    def __washed(self, input_list):
+            # trim whitespace
+            washed = []
+            for in_str in input_list:
+                washed.append(str(in_str.strip()))
+            # fix case on alphabetic characters
+            washed[0] = washed[0].upper()
+            washed[1] = washed[1].upper()
+            washed[4] = washed[4].capitalize()
+            return washed
 
     def get_load_status(self):
         return self.__load_status
@@ -105,3 +108,7 @@ class DataInterpreter:
     # for testing purposes
     def get_all_valid_records(self):
         return self.__valid_records
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
