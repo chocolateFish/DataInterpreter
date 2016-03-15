@@ -69,11 +69,12 @@ class DataInterpreter:
         validated = None
         washed = []
         try:
-            # fix case on alphabetic characters
-            input_list[0], input_list[1], input_list[4] = \
-                input_list[0].upper(), input_list[1].upper(), input_list[4].capitalize()
             for in_str in input_list:
                 washed.append(str(in_str.strip()))
+            # fix case on alphabetic characters
+            washed[0] = washed[0].upper()
+            washed[1] = washed[1].upper()
+            washed[4] = washed[4].capitalize()
             if re.fullmatch(self.RULES.get('id'), washed[0]) and \
                re.fullmatch(self.RULES.get('gender'), washed[1]) and \
                re.fullmatch(self.RULES.get('age'), washed[2]) and \
