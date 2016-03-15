@@ -10,7 +10,7 @@ class ChartView:
         self.__my_controller = the_controller
 
     # refactor
-    def draw_plot(self,x_label, y_label, x_data, y_data):
+    def draw_plot(self, x_label, y_label, x_data, y_data):
         x_data.sort()
         y_data.sort()
         import matplotlib
@@ -21,6 +21,7 @@ class ChartView:
         plt.ylabel(y_label)
         title = '{0} {1} RELATIONSHIP'.format(x_label, y_label)
         plt.title(title)
-        # plt.show()
+        plt.interactive(False)
+        plt.show()
         # actually - pass to the controller to save
-        plt.savefig('myfig')
+        # plt.savefig('myfig')

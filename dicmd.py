@@ -1,4 +1,3 @@
-# cmd view for the DataInterpreter
 import cmd
 import di
 import dicontroller
@@ -7,7 +6,7 @@ import chart
 
 
 class DataInterpreterCmd(cmd.Cmd):
-    """Simple command processor example."""
+    """CMD View for a Data Interpreter."""
     CHART_OPTIONS = ['age income', 'income age', 'age sales', 'sales age', 'income sales', 'sales income']
 
     def __init__(self):
@@ -35,8 +34,7 @@ class DataInterpreterCmd(cmd.Cmd):
         """
         self.controller.load_csv(file_path)
 
-    @staticmethod
-    def help_loadcsv():
+    def help_loadcsv(self):
         print('\n'.join(['loads data from a valid csv file at [file_path]',
                          'Each data entry must be in following order: id, gender, age, sales, bmi, income',
                          'Rules for Data as follows',
@@ -70,8 +68,7 @@ class DataInterpreterCmd(cmd.Cmd):
                            if o.startswith(text)]
         return completions
 
-    @staticmethod
-    def help_chart():
+    def help_chart(self):
         print('\n'.join(['Generates a chart using plotting options',
                          'Accepted inputs are:',
                          '     age income',
@@ -94,7 +91,7 @@ class DataInterpreterCmd(cmd.Cmd):
         return True
 
     def print_topics(self, header, cmds, cmdlen, maxcol):
-        # only print help for doccumented commands
+        # only print help for documented commands
         if header is not None:
             cmd.Cmd.print_topics(self, header, cmds, cmdlen, maxcol)
 

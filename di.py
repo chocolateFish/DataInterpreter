@@ -1,9 +1,14 @@
 # DataInterpreter - facade for the Model
 import re
-from csv import Error as csv_err
+from csv import Error as csvErr
 
 
 class DataInterpreter:
+    """
+    Interpret data loaded in from a file
+    load data from a file and validate.
+    extract data by type
+    """
     RULES = {'id': '[A-Z][0-9]{3}',
              'gender': '(M|F)',
              'age': '[0-9]{2}',
@@ -12,23 +17,29 @@ class DataInterpreter:
              'income': '[0-9]{2,3}'}
     RECORD_COLUMNS = ['id', 'gender', 'age', 'sales', 'bmi', 'income']
 
-    def __init__(self, persistence, validator):
+    def __init__(self, persistence):
         self.__valid_records = []
         self.__persistence = persistence
         self.__load_status = ""
-        self.validator = validator
 
     def load_csv(self, file_path):
+        """
+        use persistence object to get data at [file_path]
+        pass data to add function
+        :param file_path: string file_path
+        :return: None
+        """
         try:
             self.__add_data(self.__persistence.load_csv(file_path))
-        except FileNotFoundError:
-            self.__load_status = "No file found at " + file_path + ". Please enter a valid file path."
-        except csv_err:  # not sure this is the best way to catch the csv Error?
+        # except FileNotFoundError:
+        # self.__load_status = "No file found at " + file_path + ". Please enter a valid file path."
+        except csvErr:  # not sure this is the best way to catch the csv Error?
             self.__load_status = "csv_err"
 
     def __add_data(self, all_data):
         """
         add valid data
+        generate message about invalid data
         :param all_data: list containing data for multiple records
         """
         count_invalid = 0
@@ -50,7 +61,7 @@ class DataInterpreter:
 
     def __validated(self, input_list):
         """
-        validate data using re patterns
+        wash and validate data using re patterns
         if The input_list is valid return input_list else return None
         data that raises an exception returns None
         :return: Validated input_list or None
@@ -63,13 +74,12 @@ class DataInterpreter:
                 input_list[0].upper(), input_list[1].upper(), input_list[4].capitalize()
             for in_str in input_list:
                 washed.append(str(in_str.strip()))
-            is_valid = re.fullmatch(self.RULES.get('id'), washed[0]) and \
-                       re.fullmatch(self.RULES.get('gender'), washed[1]) and \
-                       re.fullmatch(self.RULES.get('age'), washed[2]) and \
-                       re.fullmatch(self.RULES.get('sales'), washed[3]) and \
-                       re.fullmatch(self.RULES.get('bmi'), washed[4])and \
-                       re.fullmatch(self.RULES.get('income'), washed[5])
-            if is_valid:
+            if re.fullmatch(self.RULES.get('id'), washed[0]) and \
+               re.fullmatch(self.RULES.get('gender'), washed[1]) and \
+               re.fullmatch(self.RULES.get('age'), washed[2]) and \
+               re.fullmatch(self.RULES.get('sales'), washed[3]) and \
+               re.fullmatch(self.RULES.get('bmi'), washed[4])and \
+               re.fullmatch(self.RULES.get('income'), washed[5]):
                 validated = washed
         except TypeError:
             pass
@@ -78,21 +88,19 @@ class DataInterpreter:
         finally:
             return validated
 
-    def __washed(self, input_list):
-            # trim whitespace
-            washed = []
-            for in_str in input_list:
-                washed.append(str(in_str.strip()))
-            # fix case on alphabetic characters
-            washed[0] = washed[0].upper()
-            washed[1] = washed[1].upper()
-            washed[4] = washed[4].capitalize()
-            return washed
-
     def get_load_status(self):
+        """
+        get the load status
+        :return: load status
+        """
         return self.__load_status
 
     def get_valid_data(self, data_name):
+        """
+        extract data by type
+        :param data_name: name of the data
+        :return: data_array of valid [data_name] values
+        """
         assert data_name in self.RECORD_COLUMNS
         data_array = []
         for data in self.__valid_records:
@@ -101,6 +109,10 @@ class DataInterpreter:
         return data_array
 
     def contains_valid_records(self):
+        """
+        return true if there are valid records, otherwise return false
+        :return: True or False
+        """
         if self.__valid_records:
             return True
         return False
@@ -108,7 +120,3 @@ class DataInterpreter:
     # for testing purposes
     def get_all_valid_records(self):
         return self.__valid_records
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

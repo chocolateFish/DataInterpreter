@@ -1,7 +1,5 @@
-# controller for the DataInterpreter
-
-
 class Controller:
+    # controller for the DataInterpreter
     def __init__(self, di_model, di_view, chart_view):
         self.model = di_model
         self.view = di_view
@@ -19,8 +17,5 @@ class Controller:
                 self.chart.draw_plot(x_data_name.upper(), y_data_name.upper(), x_data, y_data)
             except ValueError:
                 self.view.show("Chart cannot be drawn, invalid data")
-            except Exception:
-                # learn abt getting meaningful info out of matplotlib exception handling...
-                self.view.show("Something went wrong in charting feature charting")
         else:
             self.view.show("No valid data loaded. Please load data to generate chart")

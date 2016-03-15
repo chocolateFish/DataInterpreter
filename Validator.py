@@ -15,7 +15,7 @@ class Validator:
              'income': '[0-9]{2,3}'}
 
     def __init__(self):
-        pass
+        self.isValid = False
 
     def validated(self, input_list):
         """
