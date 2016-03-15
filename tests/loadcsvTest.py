@@ -27,7 +27,7 @@ class LoadTestCase(unittest.TestCase):
 
     def test_load_records_with_invalid_id_data(self):
         file_contents = [['j487', 'M', '76', '274', 'Underweight', '956'],
-                         ['605', 'M', '05', '636','Obesity', '313'],
+                         ['605', 'M', '05', '636', 'Obesity', '313'],
                          ['E44', 'M', '97', '766', 'Underweight', '248'],
                          ['C7224', 'M', '26', '388', 'Underweight', '22'],
                          ['N#%6', 'F', '49', '628', 'Underweight', '656'],
@@ -47,7 +47,7 @@ class LoadTestCase(unittest.TestCase):
                          ['N246', ' f ', '49', '628', 'Underweight', '656'],
                          ['W245', '', '40', '307', 'Normal', '05'],
                          ['W245', '4', '40', '307', 'Normal', '05']]
-        expected_data = [['S605', 'M', '05', '636','Obesity', '313'],
+        expected_data = [['S605', 'M', '05', '636', 'Obesity', '313'],
                          ['E440', 'M', '97', '766', 'Underweight', '248'],
                          ['C724', 'M', '26', '388', 'Underweight', '22'],
                          ['N246', 'F', '49', '628', 'Underweight', '656']]

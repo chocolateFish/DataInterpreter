@@ -21,5 +21,4 @@ class ChartView:
         plt.interactive(False)
         plt.plot(x_data, y_data, label="")
         plt.show()
-        # actually - pass to the controller to save
-
+        # actually - pass to the controller
