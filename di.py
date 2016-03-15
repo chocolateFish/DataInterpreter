@@ -31,8 +31,8 @@ class DataInterpreter:
         """
         try:
             self.__add_data(self.__persistence.load_csv(file_path))
-        # except FileNotFoundError:
-        # self.__load_status = "No file found at " + file_path + ". Please enter a valid file path."
+        except FileNotFoundError:
+            self.__load_status = "No file found at " + file_path + ". Please enter a valid file path."
         except csvErr:  # not sure this is the best way to catch the csv Error?
             self.__load_status = "csv_err"
 
