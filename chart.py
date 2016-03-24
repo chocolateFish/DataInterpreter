@@ -13,15 +13,12 @@ class ChartView:
     def draw_plot(self, x_label, y_label, x_data, y_data):
         x_data.sort()
         y_data.sort()
-        import matplotlib
-        matplotlib.use('Agg')
         import matplotlib.pyplot as plt
-        plt.plot(x_data, y_data, label="")
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         title = '{0} {1} RELATIONSHIP'.format(x_label, y_label)
         plt.title(title)
         plt.interactive(False)
+        plt.plot(x_data, y_data, label="")
         plt.show()
-        # actually - pass to the controller to save
-        # plt.savefig('myfig')
+        # actually - pass to the controller
