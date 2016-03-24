@@ -14,6 +14,7 @@ class Validator:
              'bmi': '(Normal|Overweight|Obesity|Underweight)',
              'income': '[0-9]{2,3}'}
 
+
     def __init__(self):
         self.isValid = False
 
