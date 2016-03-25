@@ -15,12 +15,12 @@ class TestValidateID(unittest.TestCase):
     def test_validate_id_with_trailing_white_spaces(self):
         raw_id_data = ' J487 '
         is_valid = self.validator.validate_id(raw_id_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_id_with_lower_case(self):
         raw_id_data = 'j487'
         is_valid = self.validator.validate_id(raw_id_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_id_with_not_alphanumeric_chars(self):
         """ Given id containing only whitespaces, return false"""

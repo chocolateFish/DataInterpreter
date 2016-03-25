@@ -15,7 +15,7 @@ class TestValidateAge(unittest.TestCase):
     def test_validate_age_with_trailing_white_spaces(self):
         raw_age_data = " 78 "
         is_valid = self.validator.validate_age(raw_age_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_age_with_not_numeric_chars(self):
         raw_age_data = "ab"

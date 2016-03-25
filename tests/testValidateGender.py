@@ -20,12 +20,12 @@ class TestValidateSales(unittest.TestCase):
     def test_validate_gender_lowercase(self):
         raw_data = "f"
         is_valid = self.validator.validate_gender(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_gender_with_trailing_white_spaces(self):
         raw_data = " M "
         is_valid = self.validator.validate_gender(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_gender_with_word(self):
         raw_data = "male"

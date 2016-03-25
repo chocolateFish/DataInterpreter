@@ -3,7 +3,7 @@ import validate
 
 
 class TestValidateBmi(unittest.TestCase):
-    """Test RecordValidator.validate_gender with valid and invalid values"""
+    """Test RecordValidator.validate_bmi with valid and invalid values"""
     def setUp(self):
         self.validator = validate.RecordValidator()
 
@@ -27,20 +27,20 @@ class TestValidateBmi(unittest.TestCase):
         is_valid = self.validator.validate_bmi(raw_data)
         self.assertTrue(is_valid)
 
-    def test_validate_valid_bmi_lowercase_overweight(self):
+    def test_validate_bmi_lowercase_overweight(self):
         raw_data = "overweight"
         is_valid = self.validator.validate_bmi(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
-    def test_validate_valid_bmi_mixed_case_underweight(self):
+    def test_validate_bmi_mixed_case_underweight(self):
         raw_data = "unDERweigHt"
         is_valid = self.validator.validate_bmi(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_bmi_with_trailing_white_spaces(self):
         raw_data = " normal "
         is_valid = self.validator.validate_bmi(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_bmi_with_non_alphabetic_chars(self):
         raw_data = "0besit%"

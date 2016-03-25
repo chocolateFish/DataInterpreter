@@ -20,7 +20,7 @@ class TestValidateIncome(unittest.TestCase):
     def test_validate_income_with_trailing_white_spaces(self):
         raw_data = " 78 "
         is_valid = self.validator.validate_income(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_income_with_not_numeric_chars(self):
         raw_data = "a$"

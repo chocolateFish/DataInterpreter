@@ -15,7 +15,7 @@ class TestValidateSales(unittest.TestCase):
     def test_validate_sales_with_trailing_white_spaces(self):
         raw_data = " 787 "
         is_valid = self.validator.validate_sales(raw_data)
-        self.assertTrue(is_valid)
+        self.assertFalse(is_valid)
 
     def test_validate_sales_with_not_numeric_chars(self):
         raw_data = "a$3"
