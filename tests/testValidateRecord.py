@@ -8,8 +8,8 @@ class TestValidateRecord(unittest.TestCase):
         self.validator = validate.RecordValidator()
 
     def test_validate_valid_record(self):
-        raw_data = ['W605', 'M', '05', '636', 'Obesity', '313']
-        expected_record = ['W605', 'M', '05', '636', 'Obesity', '313']
+        raw_data = ['W605', 'F', '05', '636', 'Obesity', '313']
+        expected_record = ['W605', 'F', '05', '636', 'Obesity', '313']
         expected_invalid_data_msg = ""
         self.validator.validate(raw_data)
         is_valid = self.validator.record_is_valid()
@@ -19,7 +19,7 @@ class TestValidateRecord(unittest.TestCase):
         self.assertSequenceEqual(actual_record, expected_record)
         self.assertEquals(actual_invalid_data_msg, expected_invalid_data_msg)
 
-    def test_validate_valid_record(self):
+    def test_validate_valid_record2(self):
         raw_data = ['C722', 'M', '26', '388', 'Underweight', '22']
         expected_record = ['C722', 'M', '26', '388', 'Underweight', '22']
         expected_invalid_data_msg = ""

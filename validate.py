@@ -13,7 +13,7 @@ class RecordValidator:
     INVALID_DATA_MSG_TEMPLATE = '{data} is invalid {name}'
 
     def __init__(self):
-        self.__invalid_data_msg = []
+        self.__invalid_data = []
         self.__record_data = []
         self.__is_valid = None
 
@@ -21,77 +21,86 @@ class RecordValidator:
     def wash_field(raw_data):
         """
         strip whitespace chars and capitalize
+        :param raw_data: data to wash
         """
         try:
             return raw_data.strip().capitalize()
         except AttributeError:
             raise
 
-    def validate_id(self, id_data):
+    @staticmethod
+    def __validate_field(field_rules, field_data):
+        """
+        given the name and data for a field, validate
+        :param field_rules: validation rules
+        :param field_data: data for the field
+        :return: return True if data is valid, or False if data is invalid or throws an AttributeException
+        """
         try:
-            return re.fullmatch(self.RULES.get('id'), id_data)
+            return re.fullmatch(field_rules, field_data)
         except TypeError:
             return False
+
+    def validate_id(self, id_data):
+        return self.__validate_field(self.RULES.get('id'), id_data)
 
     def validate_gender(self, gender_data):
-        try:
-            return re.fullmatch(self.RULES.get('gender'), gender_data)
-        except TypeError:
-            return False
+        return self.__validate_field(self.RULES.get('gender'), gender_data)
 
     def validate_age(self, age_data):
-        try:
-            return re.fullmatch(self.RULES.get('age'), age_data)
-        except TypeError:
-            return False
+        return self.__validate_field(self.RULES.get('age'), age_data)
 
     def validate_sales(self, sales_data):
-        try:
-            return re.fullmatch(self.RULES.get('sales'), sales_data)
-        except TypeError:
-            return False
+        return self.__validate_field(self.RULES.get('sales'), sales_data)
 
     def validate_bmi(self, bmi_data):
-        try:
-            return re.fullmatch(self.RULES.get('bmi'), bmi_data)
-        except TypeError:
-            return False
+        return self.__validate_field(self.RULES.get('bmi'), bmi_data)
 
     def validate_income(self, income_data):
-        try:
-            return re.fullmatch(self.RULES.get('income'), income_data)
-        except TypeError:
-            return False
+        return self.__validate_field(self.RULES.get('income'), income_data)
 
     def validated_record(self):
         if self.__is_valid is None:
             # break - throw an exception? - validation has not happened yet.
             # this is weird.
             pass
-        return self.__validated_data
+        return self.__record_data
 
     def record_is_valid(self):
         return self.__is_valid
 
     def get_invalid_msg(self):
-        return " ".join(self.__invalid_data_msg)
+        return " ".join(self.__invalid_data)
 
     def validate(self, data_list):
         try:
+            # wash data
             for data in data_list:
                 self.__record_data.append(data.strip().capitalize())
-
-            self.__is_valid = self.validate_id(self.__record_data[0]) and \
-                              self.validate_gender(self.__record_data[1]) and \
-                              self.validate_age(self.__record_data[2]) and \
-                              self.validate_sales(self.__record_data[3]) and \
-                              self.validate_bmi(self.__record_data[4]) and \
-                              self.validate_income(self.__record_data[5])
-
+            # validate data + generate invalid data msg
+            if not self.validate_id(self.__record_data[0]):
+                self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[0], 'id'))
+                self.__is_valid = False
+            elif not self.validate_gender(self.__record_data[1]):
+                self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[1], 'gender'))
+                self.__is_valid = False
+            elif not self.validate_age(self.__record_data[2]):
+                self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[2], 'age'))
+                self.__is_valid = False
+            elif not self.validate_sales(self.__record_data[3]):
+                self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[3], 'sales'))
+                self.__is_valid = False
+            elif not self.validate_bmi(self.__record_data[4]):
+                self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[4], 'bmi'))
+                self.__is_valid = False
+            elif not self.validate_income(self.__record_data[5]):
+                self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[5], 'income'))
+                self.__is_valid = False
+            else:
+                self.__is_valid = True
         except IndexError:
-            self.__invalid_data_msg = "Data list too short."
-        finally:
-            return True
-
-
-
+            self.__is_valid = False
+            self.__invalid_data.append("Data list too short.")
+        except AttributeError:
+            self.__is_valid = False
+            self.__invalid_data.append("Data list contains values of invalid type.")

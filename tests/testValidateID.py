@@ -8,7 +8,7 @@ class TestValidateID(unittest.TestCase):
         self.validator = validate.RecordValidator()
 
     def test_validate_valid_id(self):
-        raw_id_data = 'J487'
+        raw_id_data = 'H567'
         is_valid = self.validator.validate_id(raw_id_data)
         self.assertTrue(is_valid)
 
@@ -22,7 +22,7 @@ class TestValidateID(unittest.TestCase):
         is_valid = self.validator.validate_id(raw_id_data)
         self.assertFalse(is_valid)
 
-    def test_validate_id_with_not_alphanumeric_chars(self):
+    def test_validate_id_with_only_whitespace_chars(self):
         """ Given id containing only whitespaces, return false"""
         raw_id_data = '    '
         is_valid = self.validator.validate_id(raw_id_data)
