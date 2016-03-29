@@ -73,6 +73,9 @@ class RecordValidator:
         return " ".join(self.__invalid_data)
 
     def validate(self, data_list):
+        # empty the lists
+        del self.__invalid_data[:]
+        del self.____record_data[:]
         try:
             # wash data
             for data in data_list:
@@ -98,9 +101,12 @@ class RecordValidator:
                 self.__is_valid = False
             else:
                 self.__is_valid = True
+        # exception handling/ change error message
         except IndexError:
             self.__is_valid = False
+            del self.__invalid_data[:]
             self.__invalid_data.append("Data list too short.")
         except AttributeError:
             self.__is_valid = False
+            del self.__invalid_data[:]
             self.__invalid_data.append("Data list contains values of invalid type.")
