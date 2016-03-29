@@ -75,32 +75,31 @@ class RecordValidator:
     def validate(self, data_list):
         # empty the lists
         del self.__invalid_data[:]
-        del self.____record_data[:]
+        del self.__record_data[:]
         try:
             # wash data
             for data in data_list:
                 self.__record_data.append(data.strip().capitalize())
             # validate data + generate invalid data msg
+            self.__is_valid = True
             if not self.validate_id(self.__record_data[0]):
                 self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[0], 'id'))
                 self.__is_valid = False
-            elif not self.validate_gender(self.__record_data[1]):
+            if not self.validate_gender(self.__record_data[1]):
                 self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[1], 'gender'))
                 self.__is_valid = False
-            elif not self.validate_age(self.__record_data[2]):
+            if not self.validate_age(self.__record_data[2]):
                 self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[2], 'age'))
                 self.__is_valid = False
-            elif not self.validate_sales(self.__record_data[3]):
+            if not self.validate_sales(self.__record_data[3]):
                 self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[3], 'sales'))
                 self.__is_valid = False
-            elif not self.validate_bmi(self.__record_data[4]):
+            if not self.validate_bmi(self.__record_data[4]):
                 self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[4], 'bmi'))
                 self.__is_valid = False
-            elif not self.validate_income(self.__record_data[5]):
+            if not self.validate_income(self.__record_data[5]):
                 self.__invalid_data.append(self.INVALID_DATA_MSG_TEMPLATE.format(self.__record_data[5], 'income'))
                 self.__is_valid = False
-            else:
-                self.__is_valid = True
         # exception handling/ change error message
         except IndexError:
             self.__is_valid = False
