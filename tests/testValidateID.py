@@ -60,7 +60,7 @@ class TestValidateID(unittest.TestCase):
 
     def test_validate_id_empty(self):
         raw_id_data = ""
-        is_valid = self.validator.validate_income(raw_id_data)
+        is_valid = self.validator.validate_id(raw_id_data)
         self.assertFalse(is_valid)
 
 
